@@ -2,7 +2,6 @@ import Image from "next/image"
 import imageProjectDefault from "../public/images/project/projectDefault.png"
 
 export default function CardProjects({ repositorio }) {
-  console.log(repositorio)
   return (
     <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg flex flex-col h-full">
       <div className="bg-red-500 relative overflow-hidden rounded-t-lg w-full h-[20rem]">
