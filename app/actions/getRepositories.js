@@ -5,9 +5,9 @@ import { apiGithubRepos } from "../../utils/constants"
 export async function getRepos() {
   try {
     const response = await fetch(apiGithubRepos, {
-      next: {
-        revalidate: 1800,
-      },
+    //   next: {
+    //     revalidate: 1800,
+    //   },
     })
 
     if (!response.ok) {
@@ -29,7 +29,11 @@ export async function getRepos() {
     const reposWithLanguages = await Promise.all(
       data.map(async (repo) => {
         const languagesResponse = await fetch(
-          `${editUrlForLanguages}/${repo.name}/languages`
+          `${editUrlForLanguages}/${repo.name}/languages`, {
+          // next: {
+          //   revalidate: 1800,
+          // },
+        }
         )
 
         if (!languagesResponse.ok) {

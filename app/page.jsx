@@ -9,6 +9,7 @@ import CardProjects from "../components/cardProjects"
 export default async function Home() {
   const repositorios = await getRepos()
 
+
   const errorMessage = repositorios.error
 
   const skills = [
