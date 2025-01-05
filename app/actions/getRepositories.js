@@ -1,42 +1,59 @@
-"use server"
+'use server'
 
 import { apiGithubRepos } from "../../utils/constants"
 
 export async function getRepos() {
-  const response = await fetch(
-    apiGithubRepos,
-    {
+  try {
+    const response = await fetch(apiGithubRepos, {
       next: {
         revalidate: 1800,
       },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar repositórios: ${response.statusText}`)
     }
-  )
-  const data = await response.json()
 
-  data.sort((a, b) => {
-    return new Date(b.created_at) - new Date(a.created_at)
-  })
+    const data = await response.json()
 
-  const editUrlForLanguages = apiGithubRepos.replace("users", "repos").replace("/repos", "")
-
-  const reposWithLanguages = await Promise.all(
-    data.map(async (repo) => {
-      const languagesResponse = await fetch(
-        `${editUrlForLanguages}/${repo.name}/languages`
-      )
-      const languages = await languagesResponse.json()
-
-      return {
-        ...repo,
-        languages,
-      }
-    }),
-    {
-      next: {
-        revalidate: 1800,
-      },
+    if (!Array.isArray(data)) {
+      throw new Error('A resposta da API não é um array')
     }
-  )
 
-  return reposWithLanguages
+    data.sort((a, b) => {
+      return new Date(b.created_at) - new Date(a.created_at)
+    })
+
+    const editUrlForLanguages = apiGithubRepos.replace("users", "repos").replace("/repos", "")
+
+    const reposWithLanguages = await Promise.all(
+      data.map(async (repo) => {
+        const languagesResponse = await fetch(
+          `${editUrlForLanguages}/${repo.name}/languages`
+        )
+
+        if (!languagesResponse.ok) {
+          throw new Error(`Erro ao buscar linguagens para o repositório ${repo.name}`)
+        }
+
+        const languages = await languagesResponse.json()
+
+        return {
+          ...repo,
+          languages,
+        }
+      })
+    )
+
+    return reposWithLanguages
+  } catch (error) {
+    console.error('Erro ao buscar dados dos repositórios:', error)
+
+    // Check if the error message contains rate limit exceeded
+    if (error.message.includes('rate limit exceeded')) {
+      return { error: 'Atingido o limite de requisições à API do GitHub. Tente novamente mais tarde.' }
+    }
+
+    return [] 
+  }
 }

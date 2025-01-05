@@ -1,9 +1,8 @@
-export const name = "{{seu-nome}}"
-export const email = "{{seu-email}}"
-export const phone = "{{seu-telefone}}"
-export const github = "{{seu-github}}"
-export const linkedin = "{{seu-linkedin}}"
-export const apiGithubRepos = "{{seu-api-githubRepos}}"
+export const name = "Gabriel"
+export const email = "gabriel@gmail.com"
+export const github = "https://github.com/GabrielCostaLuiz"
+export const linkedin = "https://github.com/GabrielCostaLuiz"
+export const apiGithubRepos = "https://api.github.com/users/GabrielCostaLuiz/repos"
 export const heroResume =
   "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum placeat iure minima quos eveniet sapiente doloremque ipsam. Culpa, obcaecati architecto dignissimos expedita reprehenderit tempore voluptates eaque, porro rem cumque sunt?"
 export const aboutMe =

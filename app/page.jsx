@@ -4,13 +4,13 @@ import Link from "next/link"
 import hero from "../public/images/hero/hero.png"
 import { IoIosArrowRoundDown } from "react-icons/io"
 import { getRepos } from "./actions/getRepositories"
-
-
 import CardProjects from "../components/cardProjects"
 
 export default async function Home() {
   const repositorios = await getRepos()
- 
+
+  const errorMessage = repositorios.error
+
   const skills = [
     "JavaScript",
     "React",
@@ -72,13 +72,17 @@ export default async function Home() {
       <section>
         <h2>Projetos</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {repositorios.slice(0, 3).map((repositorio) => {
-            return (
-              <CardProjects key={repositorio.id} repositorio={repositorio} />
-            )
-          })}
-        </div>
+        {errorMessage ? (
+          <p className="text-red-500">{errorMessage}</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {repositorios.slice(0, 3).map((repositorio) => {
+              return (
+                <CardProjects key={repositorio.id} repositorio={repositorio} />
+              )
+            })}
+          </div>
+        )}
 
         <div className="mt-14  ">
           <Link
