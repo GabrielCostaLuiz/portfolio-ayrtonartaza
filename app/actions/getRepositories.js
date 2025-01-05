@@ -5,9 +5,9 @@ import { apiGithubRepos } from "../../utils/constants"
 export async function getRepos() {
   try {
     const response = await fetch(apiGithubRepos, {
-    //   next: {
-    //     revalidate: 1800,
-    //   },
+      next: {
+        revalidate: 1800,
+      },
     })
 
     if (!response.ok) {
@@ -24,32 +24,32 @@ export async function getRepos() {
       return new Date(b.created_at) - new Date(a.created_at)
     })
 
-    const editUrlForLanguages = apiGithubRepos.replace("users", "repos").replace("/repos", "")
+    const editUrlForLanguages = apiGithubRepos.replace("/repos", "").replace("users", "repos")
+ 
+    const reposWithLanguages = await Promise.all(
+      data.map(async (repo) => {
+        const languagesResponse = await fetch(
+          `${editUrlForLanguages}/${repo.name}/languages`, {
+          next: {
+            revalidate: 1800,
+          },
+        }
+        )
 
-    // const reposWithLanguages = await Promise.all(
-    //   data.map(async (repo) => {
-    //     const languagesResponse = await fetch(
-    //       `${editUrlForLanguages}/${repo.name}/languages`, {
-    //       // next: {
-    //       //   revalidate: 1800,
-    //       // },
-    //     }
-    //     )
+        if (!languagesResponse.ok) {
+          throw new Error(`Erro ao buscar linguagens para o repositório ${repo.name}`)
+        }
 
-    //     if (!languagesResponse.ok) {
-    //       throw new Error(`Erro ao buscar linguagens para o repositório ${repo.name}`)
-    //     }
+        const languages = await languagesResponse.json()
 
-    //     const languages = await languagesResponse.json()
+        return {
+          ...repo,
+          languages,
+        }
+      })
+    )
 
-    //     return {
-    //       ...repo,
-    //       languages,
-    //     }
-    //   })
-    // )
-
-    return data
+    return reposWithLanguages
   } catch (error) {
     console.error('Erro ao buscar dados dos repositórios:', error)
 
