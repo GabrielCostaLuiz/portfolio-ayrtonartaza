@@ -3,7 +3,7 @@ export const email = "{{seu-email}}"
 export const phone = "{{seu-telefone}}"
 export const github = "{{seu-github}}"
 export const linkedin = "{{seu-linkedin}}"
-export const apiGithub = "{{seu-api-github}}"
+export const apiGithubRepos = "{{seu-api-githubRepos}}"
 export const heroResume =
   "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum placeat iure minima quos eveniet sapiente doloremque ipsam. Culpa, obcaecati architecto dignissimos expedita reprehenderit tempore voluptates eaque, porro rem cumque sunt?"
 export const aboutMe =

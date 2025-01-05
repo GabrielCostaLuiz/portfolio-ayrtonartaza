@@ -1,8 +1,10 @@
 "use server"
 
+import { apiGithubRepos } from "../../utils/constants"
+
 export async function getRepos() {
   const response = await fetch(
-    "https://api.github.com/users/GabrielCostaLuiz/repos",
+    apiGithubRepos,
     {
       next: {
         revalidate: 1800,
@@ -15,10 +17,12 @@ export async function getRepos() {
     return new Date(b.created_at) - new Date(a.created_at)
   })
 
+  const editUrlForLanguages = apiGithubRepos.replace("users", "repos").replace("/repos", "")
+
   const reposWithLanguages = await Promise.all(
     data.map(async (repo) => {
       const languagesResponse = await fetch(
-        `https://api.github.com/repos/GabrielCostaLuiz/${repo.name}/languages`
+        `${editUrlForLanguages}/${repo.name}/languages`
       )
       const languages = await languagesResponse.json()
 
