@@ -1,13 +1,13 @@
-import Image from "next/image";
-import imageProjectDefault from "../public/images/project/projectDefault.png";
+import Image from "next/image"
+import imageProjectDefault from "../public/images/project/projectDefault.png"
 
 export default function CardProjects({ repositorio }) {
+  console.log(repositorio)
   return (
     <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg flex flex-col h-full">
-  
       <div className="bg-red-500 relative overflow-hidden rounded-t-lg w-full h-[20rem]">
         <Image
-          src={imageProjectDefault} 
+          src={imageProjectDefault}
           alt={repositorio.name || "Imagem padrão de projeto"}
           title={repositorio.name || "Imagem padrão de projeto"}
           className="object-fill"
@@ -16,15 +16,15 @@ export default function CardProjects({ repositorio }) {
       </div>
 
       <div className="p-6 flex flex-col justify-between flex-grow space-y-4">
-      
         <div className="space-y-4">
           <h3 className="font-bold tracking-widest uppercase text-lg">
-            {repositorio.name.replace(/[-_]/g, " ") || "Nome do projeto não disponível"}
+            {repositorio.name.replace(/[-_]/g, " ") ||
+              "Nome do projeto não disponível"}
           </h3>
 
           <div className="flex gap-3">
-            {repositorio.tags && repositorio.tags.length > 0 ? (
-              repositorio.tags.map((tag, i) => (
+            {repositorio.topics && repositorio.topics.length > 0 ? (
+              repositorio.topics.map((tag, i) => (
                 <span
                   key={i}
                   className="bg-primary px-3 py-1 uppercase text-white rounded-lg text-[0.8rem] tracking-widest"
@@ -32,6 +32,21 @@ export default function CardProjects({ repositorio }) {
                   {tag}
                 </span>
               ))
+            ) : repositorio.languages &&
+              !repositorio.languages.message &&
+              !repositorio.languages.documentation_url ? (
+              Object.entries(repositorio.languages).map(([language]) => (
+                <span
+                  key={language}
+                  className="bg-primary px-3 py-1 uppercase text-white rounded-lg text-[0.8rem] tracking-widest"
+                >
+                  {language}
+                </span>
+              ))
+            ) : repositorio.language ? (
+              <span className="bg-primary px-3 py-1 uppercase text-white rounded-lg text-[0.8rem] tracking-widest">
+                {repositorio.language}
+              </span>
             ) : (
               <span className="text-gray-500 text-sm">
                 Nenhuma tag disponível
@@ -45,7 +60,6 @@ export default function CardProjects({ repositorio }) {
           </p>
         </div>
 
-      
         <div className="flex gap-4 mt-auto">
           {repositorio.html_url ? (
             <a
@@ -85,5 +99,5 @@ export default function CardProjects({ repositorio }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
